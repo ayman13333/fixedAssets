@@ -1,0 +1,5 @@
+     depreciation_value قسط الاهلاك                                                  
+
+depreciation_value_add
+     
+depreciation_percentage   نسبة الاهلاك

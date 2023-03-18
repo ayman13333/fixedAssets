@@ -1,0 +1,154 @@
+<?php
+
+require "dbActions.php";
+$dataBaseActions = new dbActions($connection);
+
+//get total
+$total = $dataBaseActions->getTotal();
+
+//get all categories
+$categories = $dataBaseActions->getAllData('cate_assets');
+
+//get all places
+$locations = $dataBaseActions->getAllData('loca_assets');
+
+//get all floors
+$floors = $dataBaseActions->getAllData('floors');
+
+//get all workshops
+$workShops = $dataBaseActions->getAllData('class_workshop_other');
+
+$items = $dataBaseActions->getAllData('fixed_assets');
+
+
+?>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title> Fixed Assets</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    <script src="barcode.js" type="text/javascript"></script>
+    
+</head>
+
+<style>
+    .rigth{
+        width: 45%;
+    }
+    .left{
+        width: 45%;margin-right: 10%;
+    }
+    .myContainer{
+        display: flex;
+    }
+    .myModal{width: 140%;margin-top:-4%}
+ </style>
+
+
+
+<div id="layoutSidenav_content" style="direction: rtl;">
+
+    <main>
+
+        <div class="container-fluid px-4">
+            <h1 class="mt-4"> جدول الاصول</h1>
+
+            <div class="card mb-4">
+
+            </div>
+            <div class="card mb-4">
+                <div class="card-body">
+
+                    <table class="table table-striped" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>
+                                    اسم الاصل بالعربية
+                                </th>
+                                <th> اسم الاصل بالانجليزية
+                                </th>
+                                <th>الكمية</th>
+                                <th> تاريخ الشراء</th>
+                                <th> مبلغ الشراء</th>
+                                <th> تاريخ الالغاء</th>
+                                
+                                <th> باركود</th>
+                                <th> التصنيف</th>
+                                <th> المكان</th>
+                                <th> الطابق</th>
+                                <th> الورشة</th>
+                               
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <?php if ($items) : ?>
+
+                                <?php foreach ($items as $item) : ?>
+                                    <tr>
+                                        <td><?= $item['num'] ?></td>
+                                        <td> <?= $item['name_ar'] ?> </td>
+                                        <td> <?= $item['name_en'] ?> </td>
+                                        <td> <?= $item['quantity'] ?> </td>
+                                        <td> <?= $item['date_purchase'] ?> </td>
+                                        <td> <?= $item['price_purchase'] ?> </td>
+                                        <td> <?= $item['cancel_date'] ?> </td>
+                                        
+                                        </td>
+                                        <td> <?= $item['bar_code'] ?> </td>
+                                        <td>
+                                            <?php $category_name = $dataBaseActions->filter($categories, $item['categories_id']);
+                                            echo $category_name;
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php $location_name = $dataBaseActions->filter($locations, $item['places_id']);
+                                            echo $location_name;
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            $floor_name = $dataBaseActions->filter($floors, $item['floor_id']);
+                                            echo $floor_name;
+                                            ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            $workshop_name = $dataBaseActions->filter($workShops, $item['workshop_id']);
+                                            echo $workshop_name;
+                                            ?>
+                                        </td>
+
+                                       
+                                    </tr>
+                                <?php endforeach ?>
+
+
+                              
+
+                            <?php endif ?>
+
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-primary" role="alert" style="text-align: center;">
+                    المجموع= <?= $total ?>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+
+
